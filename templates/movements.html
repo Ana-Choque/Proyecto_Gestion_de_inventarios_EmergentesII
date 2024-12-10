@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Gestión de Movimientos{% endblock %}
+
+{% block content %}
+<h1>Gestión de Movimientos</h1>
+
+<!-- Formulario para registrar movimientos -->
+<form method="POST" action="{{ url_for('manage_movements') }}">
+    <h2>Registrar Movimiento</h2>
+    <div class="row g-3">
+        <div class="col-md-4">
+            <select name="product_id" class="form-control" required>
+                {% for producto in products %}
+                <option value="{{ producto.codigo }}">{{ producto.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4">
+            <select name="movement_type" class="form-control" required>
+                <option value="entrada">Entrada</option>
+                <option value="salida">Salida</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <input type="number" name="quantity" class="form-control" placeholder="Cantidad" required>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-secondary mt-3"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-floppy-fill" viewBox="0 0 16 16">
+        <path d="M0 1.5A1.5 1.5 0 0 1 1.5 0H3v5.5A1.5 1.5 0 0 0 4.5 7h7A1.5 1.5 0 0 0 13 5.5V0h.086a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5H14v-5.5A1.5 1.5 0 0 0 12.5 9h-9A1.5 1.5 0 0 0 2 10.5V16h-.5A1.5 1.5 0 0 1 0 14.5z"/>
+        <path d="M3 16h10v-5.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5zm9-16H4v5.5a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5zM9 1h2v4H9z"/>
+      </svg> Registrar Movimiento</button>
+</form>
+
+<!-- Tabla de movimientos -->
+<h2>Historial de Movimientos</h2>
+<table class="table">
+    <thead class="table-light">
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Tipo</th>
+            <th>Cantidad</th>
+            <th>Fecha</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for movimiento in movements %}
+        <tr>
+            <td>{{ movimiento.product_name }}</td>
+            <td>{{ movimiento.movement_type }}</td>
+            <td>{{ movimiento.quantity }}</td>
+            <td>{{ movimiento.date }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</tbody>
+</table>
+{% endblock %}

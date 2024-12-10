@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Productos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Gestión de Inventarios</a>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/products">Productos</a></li>
+                <li class="nav-item"><a class="nav-link" href="/movements">Movimientos</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container my-4">
+        <h1 class="text-center">Gestión de Productos</h1>
+
+        <!-- Formulario para agregar producto -->
+        <form id="form_producto" class="mb-4">
+            <div class="mb-3">
+                <label for="id" class="form-label">Código del Producto</label>
+                <input type="text" class="form-control" id="id" required>
+            </div>
+            <div class="mb-3">
+                <label for="name" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="name" required>
+            </div>
+            <div class="mb-3">
+                <label for="category" class="form-label">Categoría</label>
+                <input type="text" class="form-control" id="category" required>
+            </div>
+            <div class="mb-3">
+                <label for="stock" class="form-label">Stock</label>
+                <input type="number" class="form-control" id="stock" required>
+            </div>
+            <div class="mb-3">
+                <label for="price" class="form-label">Precio</label>
+                <input type="number" class="form-control" id="price" required>
+            </div>
+            <div class="mb-3">
+                <label for="supplier" class="form-label">Proveedor</label>
+                <input type="text" class="form-control" id="supplier" required>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Descripción</label>
+                <textarea class="form-control" id="description" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Agregar Producto</button>
+        </form>
+
+        <!-- Tabla de productos -->
+        <h2>Lista de Productos</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>Categoría</th>
+                    <th>Stock</th>
+                    <th>Precio</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in productos %}
+                <tr>
+                    <td>{{ producto['id'] }}</td>
+                    <td>{{ producto['name'] }}</td>
+                    <td>{{ producto['category'] }}</td>
+                    <td>{{ producto['stock'] }}</td>
+                    <td>{{ producto['price'] }}</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm">Editar</button>
+                        <button class="btn btn-danger btn-sm">Eliminar</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.getElementById("form_producto").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const id = document.getElementById("id").value;
+            const name = document.getElementById("name").value;
+            const category = document.getElementById("category").value;
+            const stock = document.getElementById("stock").value;
+            const price = document.getElementById("price").value;
+            const supplier = document.getElementById("supplier").value;
+            const description = document.getElementById("description").value;
+
+            fetch('/products', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, name, category, stock, price, supplier, description })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.mensaje);
+                if (data.mensaje === "Producto agregado con éxito") {
+                    location.reload();
+                }
+            })
+            .catch(error => alert("Error al agregar el producto."));
+        });
+    </script>
+</body>
+</html>
